@@ -3,7 +3,6 @@
 Prefix-based search engine using Trie and Min-Heap ranking.
 
 ---
-
 ## Description
 
 This project provides auto-suggestion of words based on user-input prefixes. It uses a **Trie** data structure for fast prefix lookup and a **Min-Heap** to rank suggestions by frequency or relevance. Ideal for search bars, input assistance, and auto-completion features. 
