@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+    <html>
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+            <script src="https://kit.fontawesome.com/2e687deb25.js" crossorigin="anonymous"></script>
+
+            <style>
+                *{
+                    font-family : 'Montserrat';
+                    font-size : 20px;
+                    -webkit-text-stroke : 0.8px;
+                    box-sizing: border-box;
+                    
+                }
+                .inner-container{
+                    box-sizing : border-box;
+                    width : 95vw;
+                    height : 100vh;
+                    display : flex;
+                    flex-direction : column;
+                    justify-content : top;
+                    align-items : center;
+                }
+                .input-bar {
+                    position: relative;
+                    width: 800px;
+                    height: 60px;
+                    margin-top: 60px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                #inp {
+                    width: 100%;
+                    height: 100%;
+                    border: 0.6vh solid rgb(138, 6, 142);
+                    border-radius: 50px;
+                    padding-left: 50px;
+                    font-size: 20px;
+                    z-index: 1;
+                    box-sizing: border-box;
+                    color : rgb(138, 6, 142);
+                }
+                #inp:focus {
+                    outline: none;
+                    border: 0.6vh solid rgb(138, 6, 142);
+                }
+
+                #search {
+                    position: absolute;
+                    left: 20px;
+                    font-size: 24px;
+                    z-index: 2;
+                    color:  rgb(138, 6, 142);
+                }
+                
+                #into{
+                    position: absolute;
+                    right: 20px;
+                    font-size: 30px;
+                    z-index: 2;
+                    color:  rgb(138, 6, 142);
+                    cursor : pointer;
+                }
+                #ull{
+                    list-style-type : none ;
+                    display : none;
+                    width : 750px;
+                    margin-top : 0;
+                    padding : 0;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
+
+                #ull li {
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                #ull li:hover{
+                    
+                    background :rgb(217, 212, 217);
+                }
+                #ull li button {
+                    all: unset;
+                    cursor: pointer;
+                    font-size: 16px;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;  
+                    justify-content: flex-start;
+                    
+                    padding: 15px 20px;
+                    box-sizing: border-box;
+                }
+
+                #ull li button:hover {
+                    color :rgb(138, 6, 142);
+                }
+                
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="inner-container">
+                    <div class="input-bar">
+                        <i class="fa-solid fa-magnifying-glass" id = "search"></i>
+                        <input type="text" id="inp" name = "input_text" placeholder = "Search the text here ...">
+                        <i class="fa-solid fa-xmark" id = "into"></i>
+                    </div>
+                    <ul id="ull">
+                            <li value = 1><button></button></li>
+                            <li value = 2><button></button></li>
+                            <li value = 3><button></button></li>
+                            <li value = 4><button></button></li>
+                            <li value = 5><button></button></li>
+                            <li value = 6><button></button></li>
+                            <li value = 7><button></button></li>
+                            <li value = 8><button></button></li>
+                            <li value = 9><button></button></li>
+                            <li value = 10><button></button></li>
+                        </ul>
+                    <p id="res"></p>
+                </div>
+            </div>
+
+            <script>
+                inp = document.querySelector('#inp');
+                items = document.getElementsByTagName("li");
+                
+                res = document.querySelector('#res');
+
+                inp.addEventListener('input', () => {
+                    const val = inp.value;
+
+                    fetch(`/fetchdata/?query=${encodeURIComponent(val)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var suggestions = data.result ;
+                        var length = suggestions.length ;
+                        
+                        for (i = 0; i < items.length ; i++){
+                            var btn = items[i].querySelector('button');
+
+                            if(i < length){
+                                items[i].style.display = "block";
+                                ull.style.display = "block";
+                                btn.innerHTML = suggestions[i];
+                                btn.style.padding = '20px 20px';
+                                btn.style.width = '700px';
+                                btn.style.marginLeft = '2.5vw';
+                                btn.style.height = '5px';
+                                btn.style.alignText = 'center';
+                                let word = suggestions[i]; 
+
+
+                                btn.onclick = () => {
+                                    inp.value = word;
+                                    ull.style.display = "none";
+                                };
+
+                            }
+                            else {
+                                items[i].style.display = "none";
+                            }
+                        }
+
+                        ull.style.display = length > 0 ? "block" : "none";
+
+
+                    })
+                    .catch(error => {
+                        res.innerHTML += 'Error';
+                        console.error(error);
+                    });
+                });
+
+
+                inp.addEventListener('keypress', function(e) {
+
+                    if(e.key === 'Enter'){
+                        const query = inp.value.trim();
+                        if(query !== '') {
+
+                            const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                            window.location.href = googleSearchUrl;
+                        }
+                    }
+                });
+
+                document.querySelector('#into').onclick = () => {
+                    inp.value = '';            
+                    ull.style.display = 'none';
+                };
+            </script>
+        </body>
+    </html>
