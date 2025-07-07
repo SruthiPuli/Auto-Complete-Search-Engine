@@ -32,4 +32,3 @@ def fetch_data(request) :
     top_words = trie.get_top_k(data)
 
     return JsonResponse({"result" : top_words})
-# Create your views here.
