@@ -158,7 +158,6 @@ Performs context-aware prefix matching and ranks suggestions based on usage hist
 #### HTML / CSS / JavaScript
 - Creating a clean, user-friendly interface for the search bar
 - Capturing the user’s typed input dynamically
-- Sending input data to the Django backend using AJAX/fetch
 - Displaying live suggestions as the user types
 
 ### Data Structures
